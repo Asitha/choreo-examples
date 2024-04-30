@@ -16,7 +16,6 @@
 
 import ballerina/uuid;
 import ballerina/http;
-import ballerina/jwt;
 
 enum Status {
     reading = "reading",
@@ -74,19 +73,20 @@ service /readinglist on new http:Listener(9090) {
 // This function is used to get the books of the user who is logged in.
 // User information is extracted from the JWT token.
 function getUsersBooks(http:Headers headers) returns map<Book>|http:BadRequest|error {
-        string|error jwtAssertion = headers.getHeader("x-jwt-assertion");
-        if (jwtAssertion is error) {
-            http:BadRequest badRequest = {
-                body: {
-                    "error": "Bad Request",
-                    "error_description": "Error while getting the JWT token"
-                }
-            };
-            return badRequest;
-        }
+        // string|error jwtAssertion = headers.getHeader("x-jwt-assertion");
+        // if (jwtAssertion is error) {
+        //     http:BadRequest badRequest = {
+        //         body: {
+        //             "error": "Bad Request",
+        //             "error_description": "Error while getting the JWT token"
+        //         }
+        //     };
+        //     return badRequest;
+        // }
 
-        [jwt:Header, jwt:Payload] [_, payload] = check jwt:decode(jwtAssertion);
-        string username = payload.sub is string ? <string>payload.sub : DEFAULT_USER;
+        // [jwt:Header, jwt:Payload] [_, payload] = check jwt:decode(jwtAssertion);
+        // string username = payload.sub is string ? <string>payload.sub : DEFAULT_USER;
+        string username = DEFAULT_USER;
         if (books[username] is ()) {
             books[username] = {};
         }
